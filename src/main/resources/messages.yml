@@ -1,0 +1,73 @@
+placeholders:
+  - name: prefix
+    text: "<dark_gray>[<light_purple>Cosmic</light_purple><aqua>Capital</aqua>]</dark_gray>"
+  - name: break
+    text: "<dark_aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-"
+  - name: usage
+    text: "<red>Wrong Usage!</red>"
+
+command-parse:
+  incorrect-format: "%prefix% %usage% <click:suggest_command:/%command%><hover:show_text:'<green>Click here to suggest the correct format!'><gray>/%command%</gray></hover>"
+  player-only: "%prefix% <red>You cannot execute <white>%command%.</white>"
+  console-only: "%prefix% <red>You cannot execute <white>%command%.</white>"
+  no-tab:
+    player: "< No players found >"
+
+economy:
+  give:
+    permission: "%prefix% <red>You do not have permissions to give players money."
+    incorrect-usage: "%message:command-parse.incorrect-format%"
+    unknown-player: "%message:command-parse.incorrect-format%"
+    negative: "%message:command-parse.incorrect-format%"
+    all:
+      permission: "%prefix% <red>You do not have permissions to give money to all offline players and online players money."
+    offline:
+      permission: "%prefix% <red>You do not have permissions to give money to all offline players money."
+    online:
+      permission: "%prefix% <red>You do not have permissions to give money to all online players money."
+    player:
+      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
+    receive: "%prefix% <green>You were given <white>$%amount%</white> by <white>%who%</white>."
+    send:    "%prefix% <green>Sent <white>$%amount%</white> to <white>%who%</white>"
+  take:
+    permission: "%prefix% <red>You do not have permissions to remove money from players."
+    incorrect-usage: "%message:command-parse.incorrect-format%"
+    unknown-player: "%message:command-parse.incorrect-format%"
+    negative: "%message:command-parse.incorrect-format%"
+    all:
+      permission: "%prefix% <red>You do not have permissions to remove money from all offline players and online players money."
+    offline:
+      permission: "%prefix% <red>You do not have permissions to remove money from all offline players money."
+    online:
+      permission: "%prefix% <red>You do not have permissions to remove money from all online players money."
+    player:
+      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
+    removed: "%prefix% <green><white>$%amount%</white> was removed from you by <white>%who%</white>."
+    remove:    "%prefix% <green>Removed <white>$%amount%</white> from <white>%who%</white>"
+  set:
+    permission: "%prefix% <red>You do not have permissions to remove money from players."
+    incorrect-usage: "%message:command-parse.incorrect-format%"
+    unknown-player: "%message:command-parse.incorrect-format%"
+    negative: "%message:command-parse.incorrect-format%"
+    all:
+      permission: "%prefix% <red>You do not have permissions to set money of all offline players and online players money."
+    offline:
+      permission: "%prefix% <red>You do not have permissions to set money of all offline players money."
+    online:
+      permission: "%prefix% <red>You do not have permissions to set money of all online players money."
+    player:
+      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
+    set: "%prefix% <green><white>%who%</white> has set your balance as <white>$%amount%</white>."
+    operator:    "%prefix% <green>Set <white>%who%</white>'s balance to <white>$%amount%</white>"
+
+balance:
+  unknown-player: "%message:command-parse.incorrect-format%"
+  other: "<green>Balance of <white>%who%</white>: <white>$%balance%</white>"
+  self: "<green>Your balance: <white>$%balance%</white>"
+
+pay:
+  unknown-player: "%message:command-parse.incorrect-format%"
+  negative: "%message:command-parse.incorrect-format%"
+  no-funds: "%prefix% <red>You do not have enough funds to pay <gray>%amount%</gray> to <gray>%who%</gray>."
+  send: "%prefix% <green>Sent <white>%amount%</white> to <white>%who%</white>."
+  receive: "%prefix% <green>Received <white>%amount%</white> from <white>%who%</white>."

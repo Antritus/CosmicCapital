@@ -1,0 +1,4 @@
+name: CosmicCapital
+version: '1.0-SNAPSHOT'
+main: me.antritus.astral.cosmiccapital.CosmicCapital
+api-version: '1.20'
