@@ -43,7 +43,23 @@ public class PlayerAccountManager implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		PlayerAccountDatabase playerAccountDatabase = cosmicCapital.getPlayerDatabase();
-		playerAccountDatabase.save(event.getPlayer().getUniqueId(), true);
+		new BukkitRunnable() {
+			/**
+			 * When an object implementing interface {@code Runnable} is used
+			 * to create a thread, starting the thread causes the object's
+			 * {@code run} method to be called in that separately executing
+			 * thread.
+			 * <p>
+			 * The general contract of the method {@code run} is that it may
+			 * take any action whatsoever.
+			 *
+			 * @see Thread#run()
+			 */
+			@Override
+			public void run() {
+				playerAccountDatabase.save(event.getPlayer().getUniqueId(), true);
+			}
+		}.runTaskAsynchronously(cosmicCapital);
 	}
 
 	public void onEnable(){
@@ -57,7 +73,7 @@ public class PlayerAccountManager implements Listener {
 	}
 	public void onDisable(){
 		PlayerAccountDatabase playerAccountDatabase = cosmicCapital.getPlayerDatabase();
-		cosmicCapital.getServer().getOnlinePlayers().forEach(player-> playerAccountDatabase.save(player.getUniqueId(), true));
+		playerAccountDatabase.disable();
 		task.cancel();
 	}
 }

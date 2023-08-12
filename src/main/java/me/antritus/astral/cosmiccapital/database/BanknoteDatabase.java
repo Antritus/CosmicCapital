@@ -51,15 +51,19 @@ public class BanknoteDatabase {
 			historyList.forEach(history->{
 				//TODO
 				 });
+			double balance = (databaseYML.isDouble(uuid+".balance") ? databaseYML.getDouble(uuid+".balance") : -1);
 			//noinspection removal
-			account.setBalance(databaseYML.getDouble(uuid.toString()+".balance"));
+			account.setBalance(balance);
+		}
+		account.setLoading(false);
+		if (account.getBalance()<=0){
+			return;
 		}
 		accounts.put(account.uniqueId(), account);
-		account.setLoading(false);
 	}
 
 	public boolean isValid(UUID uuid){
-		return databaseYML.isSet(uuid.toString());
+		return accounts.get(uuid) != null && accounts.get(uuid).getBalance()>0;
 	}
 
 	private void save(UUID uniqueId) {
@@ -67,12 +71,19 @@ public class BanknoteDatabase {
 		if (account == null){
 			return;
 		}
-		databaseYML.set(uniqueId.toString()+".balance", account.getBalance());
-		databaseYML.set(uniqueId.toString()+".history", "[]");
+		System.out.println(account.getBalance());
+		databaseYML.set(uniqueId+".balance", account.getBalance());
+		databaseYML.set(uniqueId+".history", "[]");
 	}
 
 	private void unload(UUID uniqueId) {
 		accounts.remove(uniqueId);
+	}
+
+	public void save(){
+		accounts.forEach((id, account)->{
+			save(id, false);
+		});
 	}
 
 	public void save(UUID uniqueId, boolean unload) {
@@ -82,6 +93,11 @@ public class BanknoteDatabase {
 				save(uniqueId);
 				if (unload){
 					unload(uniqueId);
+				}
+				try {
+					databaseYML.save();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
 				}
 			}
 		}.runTaskAsynchronously(cosmicCapital);

@@ -72,13 +72,16 @@ public abstract class Account implements IUser {
 	@CreatesEntry(createsEntry = true)
 	public void withdraw(BanknoteAccount account, double amount){
 		balance-=amount;
-		account.withdrawReceive(this, amount);
 		history.add(Entry.createBanknote(this, account, amount));
+		((Account) account).receiveTransfer(this, amount);
 	}
 	@CreatesEntry(createsEntry = true)
-	protected void withdrawReceive(Account account, double amount){
-		balance+=amount;
-		history.add(Entry.receiveTransfer(this, account, amount));
+	public void deposit(BanknoteAccount account, double balance){
+		balance+=balance;
+		history.add(Entry.createBanknoteDeposit(this, account, balance));
+		(account).sendTransfer(this, balance);
+		((Account) account).checkBalance();
+		checkBalance();
 	}
 
 
@@ -135,5 +138,8 @@ public abstract class Account implements IUser {
 	}
 	public boolean isLoading(){
 		return isLoading;
+	}
+
+	public void loadHistory(String history) {
 	}
 }

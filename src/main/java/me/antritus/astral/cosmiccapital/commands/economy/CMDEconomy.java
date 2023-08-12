@@ -190,7 +190,7 @@ public class CMDEconomy extends CosmicCapitalCommand {
 									if (account.isLoading()){
 										return;
 									}
-									account.removeOperator(sender, amount);
+									account.setOperator(sender, amount);
 									cancel();
 								}
 							}.runTaskTimerAsynchronously(main, 0, 20);
@@ -204,7 +204,7 @@ public class CMDEconomy extends CosmicCapitalCommand {
 						}
 						Bukkit.getOnlinePlayers().forEach(p->{
 							PlayerAccount account = database.get(p);
-							account.removeOperator(sender, amount);
+							account.setOperator(sender, amount);
 							messageManager.message(p, "economy.set.set", "%who%="+sender.getName(), "%amount%="+amount);
 						});
 						messageManager.message(sender, "economy.set.set", "%who%=all online players", "%amount%="+amount);
@@ -232,7 +232,7 @@ public class CMDEconomy extends CosmicCapitalCommand {
 				return true;
 			}
 			PlayerAccount playerAccount = database.get(player.getUniqueId());
-			playerAccount.removeOperator(sender, amount);
+			playerAccount.setOperator(sender, amount);
 			if (player.isOnline()) {
 				messageManager.message((Player) player, "economy.set.set", "%who%=" + sender.getName(), "%amount%=" + amount);
 				messageManager.message(sender, "economy.set.operator", "%who%="+player.getName(), "%amount%="+amount);
@@ -339,8 +339,8 @@ public class CMDEconomy extends CosmicCapitalCommand {
 			}
 		}
 		if (action.equalsIgnoreCase("delete") ||action.equalsIgnoreCase("reset")){
-			msg = "economy.take.";
-			if (!sender.hasPermission("cosmiccapital.economy.take")){
+			msg = "economy.reset.";
+			if (!sender.hasPermission("cosmiccapital.economy.reset")){
 				messageManager.message(sender, msg+"permission", "%command%=economy reset <player|-all|-offline|-online>");
 				return true;
 			}
@@ -352,7 +352,7 @@ public class CMDEconomy extends CosmicCapitalCommand {
 			if (arg.equalsIgnoreCase("-all") || arg.equalsIgnoreCase("-offline") || arg.equalsIgnoreCase("-online")){
 				switch (arg.toLowerCase()){
 					case "-all" -> {
-						if (!sender.hasPermission("cosmiccapital.economy.take.all")){
+						if (!sender.hasPermission("cosmiccapital.economy.reset.all")){
 							messageManager.message(sender, msg+"all.permission", "%command%=economy take <player|-all|-offline|-online>");
 							return true;
 						}
@@ -362,14 +362,14 @@ public class CMDEconomy extends CosmicCapitalCommand {
 								Bukkit.getOnlinePlayers().forEach(p->{
 									PlayerAccount account = database.get(p);
 									account.resetOperator(sender);
-									messageManager.message(p, "economy.take.removed", "%who%="+sender.getName());
+									messageManager.message(p, "economy.reset.reset", "%who%="+sender.getName());
 								});
 							}
 						}.runTaskAsynchronously(main);
-						messageManager.message(sender, "economy.take.remove", "%who%=all offline and online players");
+						messageManager.message(sender, "economy.reset.reset-operator", "%who%=all offline and online players");
 					}
 					case "-offline" -> {
-						if (!sender.hasPermission("cosmiccapital.economy.take.offline")) {
+						if (!sender.hasPermission("cosmiccapital.economy.reset.offline")) {
 							messageManager.message(sender, msg + "offline.permission", "%command%=economy take <player|-all|-offline|-online>");
 							return true;
 						}
@@ -386,19 +386,19 @@ public class CMDEconomy extends CosmicCapitalCommand {
 								}
 							}.runTaskTimerAsynchronously(main, 0, 20);
 						}
-						messageManager.message(sender, "economy.take.removed", "%who%=all offline players");
+						messageManager.message(sender, "economy.reset.reset-operator", "%who%=all offline players");
 					}
 					case "-online" -> {
-						if (!sender.hasPermission("cosmiccapital.economy.take.online")){
-							messageManager.message(sender, msg+"online.permission", "%command%=economy take <player|-all|-offline|-online>");
+						if (!sender.hasPermission("cosmiccapital.economy.reset.online")){
+							messageManager.message(sender, msg+"online.permission", "%command%=economy reset <player|-all|-offline|-online>");
 							return true;
 						}
 						Bukkit.getOnlinePlayers().forEach(p->{
 							PlayerAccount account = database.get(p);
 							account.resetOperator(sender);
-							messageManager.message(p, "economy.take.removed", "%who%="+sender.getName());
+							messageManager.message(p, "economy.take.reset", "%who%="+sender.getName());
 						});
-						messageManager.message(sender, "economy.take.remove", "%who%=all online players");
+						messageManager.message(sender, "economy.take.reset-operator", "%who%=all online players");
 					}
 				}
 				return true;

@@ -48,9 +48,10 @@ public class CosmicCapital extends FactionsPlugin {
 
 	@Override
 	public void enable() {
-//		enableDatabase();
+		enableDatabase();
 		enableCommands();
 		playerAccountDatabase = new PlayerAccountDatabase(this);
+		playerAccountDatabase.create();
 		playerAccountManager = new PlayerAccountManager(this);
 		playerAccountManager.onEnable();
 		banknoteDatabase = new BanknoteDatabase(this);
@@ -61,12 +62,11 @@ public class CosmicCapital extends FactionsPlugin {
 
 	@Override
 	public void startDisable() {
-
+		playerAccountManager.onDisable();
 	}
 
 	@Override
 	public void disable() {
-		playerAccountManager.onDisable();
 	}
 
 

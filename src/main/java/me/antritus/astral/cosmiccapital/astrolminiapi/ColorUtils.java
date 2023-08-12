@@ -23,7 +23,7 @@ public class ColorUtils {
 	public static Component translateCompLegacy(String msg){
 		return LegacyComponentSerializer.legacy('§').deserialize(msg);
 	}
-	public static String deseriazize(Component component){
+	public static String deserialize(Component component){
 		return PlainTextComponentSerializer.plainText().serialize(component);
 	}
 }

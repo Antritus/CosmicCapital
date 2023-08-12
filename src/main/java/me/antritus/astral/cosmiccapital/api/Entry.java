@@ -78,6 +78,36 @@ public class Entry {
 		return new Entry(EntryType.WITHDRAW, amount, account, banknoteAccount, null);
 	}
 
+	public static Entry createBanknoteDeposit(Account account, BanknoteAccount banknote, double balance) {
+		return new Entry(EntryType.DEPOSIT_BANKNOTE, balance, account, banknote, null);
+	}
+
+	public static Entry transactionSend(Account account, Account otherAcc, double amount, String jsonInfo){
+		return new Entry(EntryType.TRANSACTION_SEND, amount, account, otherAcc, jsonInfo);
+	}
+	public static Entry transactionSend(Account account, Account otherAcc, double amount){
+		return new Entry(EntryType.TRANSACTION_SEND, amount, account, otherAcc, null);
+	}
+	public static Entry transactionReceive(Account account, Account otherAcc, double amount, String jsonInfo){
+		return new Entry(EntryType.TRANSACTION_RECEIVE, amount, account, otherAcc, jsonInfo);
+	}
+	public static Entry transactionReceive(Account account, Account otherAcc, double amount){
+		return new Entry(EntryType.TRANSACTION_SEND, amount, account, otherAcc, null);
+	}
+
+	public static Entry plugin(Account account, Account otherAcc, double amount, String info){
+		return new Entry(EntryType.PLUGIN, amount, account, otherAcc, info);
+	}
+	public static Entry plugin(Account account, Account otherAcc, double amount){
+		return new Entry(EntryType.PLUGIN, amount, account, otherAcc, null);
+	}
+	public static Entry plugin(Account account, double amount){
+		return new Entry(EntryType.PLUGIN, amount, account, null, null);
+	}
+	public static Entry plugin(Account account, double amount, String jsonInfo){
+		return new Entry(EntryType.PLUGIN, amount, account, null, jsonInfo);
+	}
+
 	@Override
 	public String toString(){
 		switch (type){

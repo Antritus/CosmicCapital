@@ -1,10 +1,20 @@
 placeholders:
+  - name: anti-cheat
+    text: "<dark_gray>[<light_purple>Cosmic</light_purple><aqua>Capital</aqua><dark_purple>AntiCheat</dark_purple>]</dark_gray>"
   - name: prefix
     text: "<dark_gray>[<light_purple>Cosmic</light_purple><aqua>Capital</aqua>]</dark_gray>"
   - name: break
     text: "<dark_aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-"
   - name: usage
     text: "<red>Wrong Usage!</red>"
+
+anti-cheat:
+  banknote:
+    claim:
+      non-valid: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover>"
+      non-valid-account-exists: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\nBalance %account:balance%\\nID:%account:id%>ACCOUNT</hover>"
+      de-activated: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\\nBalance %account:balance%\\\nID:%account:id%>ACCOUNT</hover>"
+      active-different-amount: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>ACTIVE/CHANGED VALUE BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\nBalance %account:balance%\\nID:%account:id%>ACCOUNT</hover>"
 
 command-parse:
   incorrect-format: "%prefix% %usage% <click:suggest_command:/%command%><hover:show_text:'<green>Click here to suggest the correct format!'><gray>/%command%</gray></hover>"
