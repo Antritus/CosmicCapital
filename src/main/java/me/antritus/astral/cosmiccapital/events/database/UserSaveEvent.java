@@ -1,7 +1,7 @@
 package me.antritus.astral.cosmiccapital.events.database;
 
 import me.antritus.astral.cosmiccapital.CosmicCapital;
-import me.antritus.astral.cosmiccapital.api.Account;
+import me.antritus.astral.cosmiccapital.api.types.account.IAccount;
 import me.antritus.astral.cosmiccapital.events.CosmicCapitalAccountEvent;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class UserSaveEvent extends CosmicCapitalAccountEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 
-	public UserSaveEvent(@NotNull CosmicCapital cosmicCapital, Account user) {
+	public UserSaveEvent(@NotNull CosmicCapital cosmicCapital, IAccount user) {
 		super(true, cosmicCapital, user);
 	}
 

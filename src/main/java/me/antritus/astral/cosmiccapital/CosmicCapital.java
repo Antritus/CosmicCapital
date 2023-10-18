@@ -1,107 +1,157 @@
 package me.antritus.astral.cosmiccapital;
 
-import me.antritus.astral.cosmiccapital.antsfactions.FactionsPlugin;
-import me.antritus.astral.cosmiccapital.api.CosmicCapitalCommand;
-import me.antritus.astral.cosmiccapital.astrolminiapi.CommandConfiguration;
-import me.antritus.astral.cosmiccapital.commands.cash.CMDWithdraw;
-import me.antritus.astral.cosmiccapital.commands.economy.CMDBalance;
-import me.antritus.astral.cosmiccapital.commands.economy.CMDEconomy;
-import me.antritus.astral.cosmiccapital.commands.economy.CMDPay;
-import me.antritus.astral.cosmiccapital.database.BanknoteDatabase;
-import me.antritus.astral.cosmiccapital.database.PlayerAccountDatabase;
-import me.antritus.astral.cosmiccapital.manager.BanknoteAccountManager;
-import me.antritus.astral.cosmiccapital.manager.PlayerAccountManager;
-import org.bukkit.configuration.InvalidConfigurationException;
+import com.github.antritus.astral.messages.MessageManager;
+import me.antritus.astral.cosmiccapital.api.*;
+import me.antritus.astral.cosmiccapital.api.managers.IAccountManager;
+import me.antritus.astral.cosmiccapital.api.providers.CosmicCapitalProvider;
+import me.antritus.astral.cosmiccapital.api.types.currency.ICurrency;
+import me.antritus.astral.cosmiccapital.commands.Command;
+import me.antritus.astral.cosmiccapital.currencies.Currency;
+import me.antritus.astral.cosmiccapital.database.AccountDatabase;
+import me.antritus.astral.cosmiccapital.database.h2.H2PlayerAccountDatabase;
+import me.antritus.astral.cosmiccapital.database.mysql.MySQLPlayerAccountDatabase;
+import me.antritus.astral.cosmiccapital.internal.PlayerAccount;
+import me.antritus.astral.cosmiccapital.manager.*;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
 /**
  * @author Antritus
  * @since 1.0-SNAPSHOT
  */
-public class CosmicCapital extends FactionsPlugin {
-	private final CommandConfiguration commandConfiguration;
-	private PlayerAccountDatabase playerAccountDatabase;
-	private PlayerAccountManager playerAccountManager;
-	private BanknoteAccountManager banknoteAccountManager;
-	private BanknoteDatabase banknoteDatabase;
+public class CosmicCapital extends JavaPlugin implements CosmicCapitalAPI, IEconomyProvider {
+	private MessageManager messageManager;
+	private PlayerAccountListener playerAccountListener;
+	private AccountManagerRegistryManager accountRegistryManager;
+	private AccountDatabase<PlayerAccount> playerAccountManager;
+	private CurrencyManager currencyManager;
+	private OperatorManagerImpl operatorManager;
+	private BankManagerImpl bankManager;
+	private WorldManagerImpl worldManager;
 
-	public CosmicCapital(){
-		commandConfiguration = new CommandConfiguration(this);
+	@Override
+	public void onEnable() {
+		switch (getConfig().getString("database.player.type", "database.player.type").toLowerCase()){
+			case "mysql" -> {
+				playerAccountManager = new MySQLPlayerAccountDatabase<>(this, PlayerAccount.class, "global");
+			}
+			case "h2", "default" -> {
+				playerAccountManager = new H2PlayerAccountDatabase<>(this, PlayerAccount.class, "global");
+			}
+			default -> {
+				playerAccountManager = null;
+				getServer().getPluginManager().disablePlugin(this);
+				throw  new IllegalArgumentException("Illegal configuration! Database type is unknown for database.player.type!");
+			}
+		}
+		playerAccountManager.createTable();
+		ICurrency.CharDisplay charDisplay = null;
 		try {
-			commandConfiguration.load();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (InvalidConfigurationException e) {
+			charDisplay = ICurrency.CharDisplay.valueOf(getConfig().getString("currency-default.display", "FRONT").toUpperCase());
+		} catch (IllegalArgumentException ignore){
+			charDisplay = ICurrency.CharDisplay.NEVER;
+		}
+		Currency currencyDefault = new Currency(this,
+				getConfig().getString("currency-default.name", "Dollar"),
+				getConfig().getString("currency-default.plural", "dollars"),
+				getConfig().getString("currency-default.singular", "dollar"),
+				getConfig().getString("currency-default.character", "$"),
+				charDisplay
+				);
+		currencyManager = new CurrencyManager(currencyDefault);
+
+		accountRegistryManager = new AccountManagerRegistryManager();
+		// Make sure no other plugins try to register the player account manager for normal currencies.
+		accountRegistryManager.register(playerAccountManager, PlayerAccount.class);
+
+		operatorManager = new OperatorManagerImpl();
+
+		messageManager = new MessageManager(this);
+
+		playerAccountListener = new PlayerAccountListener(this);
+		playerAccountListener.onEnable();
+
+		new Command(this);
+
+
+		worldManager = new WorldManagerImpl(this);
+		registerListener(worldManager);
+
+
+		Class<CosmicCapitalProvider> providerClass = CosmicCapitalProvider.class;
+		try {
+			Field apiField =providerClass.getDeclaredField("api");
+			apiField.setAccessible(true);
+			apiField.set(null, this);
+			apiField.setAccessible(false);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+	}
 
+
+	public void registerListener(Listener listener){
+		getServer().getPluginManager().registerEvents(listener, this);
+	}
+
+	@Override
+	public void onDisable(){
+		playerAccountListener.onDisable();
+	}
+
+	public MessageManager messageManager(){
+		return messageManager;
+	}
+	public PlayerAccountListener playerAccountListener() {
+		return playerAccountListener;
+	}
+
+	public AccountManagerRegistryManager accountRegistryManager() {
+		return accountRegistryManager;
 	}
 
 
 	@Override
-	public void updateConfig(@Nullable String oldVersion, String newVersion) {
+	public OperatorManagerImpl operatorManager() {
+		return operatorManager;
 	}
 
 	@Override
-	public void enable() {
-		enableDatabase();
-		enableCommands();
-		playerAccountDatabase = new PlayerAccountDatabase(this);
-		playerAccountDatabase.create();
-		playerAccountManager = new PlayerAccountManager(this);
-		playerAccountManager.onEnable();
-		banknoteDatabase = new BanknoteDatabase(this);
-		banknoteAccountManager = new BanknoteAccountManager(this);
-		getServer().getPluginManager().registerEvents(playerAccountManager, this);
-		getServer().getPluginManager().registerEvents(banknoteAccountManager, this);
-	}
-
-	@Override
-	public void startDisable() {
-		playerAccountManager.onDisable();
-	}
-
-	@Override
-	public void disable() {
-	}
-
-
-
-
-
-	private void enableCommands(){
-		List<CosmicCapitalCommand> commands = new ArrayList<>();
-		commands.add(new CMDEconomy(this));
-		commands.add(new CMDBalance(this));
-		commands.add(new CMDPay(this));
-		commands.add(new CMDWithdraw(this));
-		commands.forEach(command->{
-			commandConfiguration.load(command);
-			command.registerCommand();
-		});
-	}
-
-	public CommandConfiguration getCommandConfiguration() {
-		return commandConfiguration;
-	}
-
-	public PlayerAccountDatabase getPlayerDatabase() {
-		return playerAccountDatabase;
-	}
-
-	public PlayerAccountManager getPlayerManager() {
+	public @NotNull AccountDatabase<PlayerAccount> playerManager() {
 		return playerAccountManager;
 	}
 
-	public BanknoteAccountManager getBanknoteAccountManager() {
-		return banknoteAccountManager;
+	@Override
+	public @NotNull IAccountManager banknoteManager() {
+		return null;
 	}
 
-	public BanknoteDatabase getBankNoteDatabase() {
-		return banknoteDatabase;
+	@Override
+	public @NotNull IAccountManager bankManager() {
+		return multiBankManager;
+	}
+
+	@Override
+	public @NotNull CurrencyManager currencyManager() {
+		return currencyManager;
+	}
+
+	@Override
+	public WorldManagerImpl worldManager() {
+		return null;
+	}
+
+	@Override
+	public @NotNull String getVersion() {
+		return getPluginMeta().getVersion();
+	}
+
+	@Override
+	public @Nullable CosmicCapital getPlugin() {
+		return this;
 	}
 }

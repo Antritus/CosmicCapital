@@ -1,0 +1,31 @@
+# Not sure what this is, and I'm too scared to look what it does
+override-vault: true
+
+currency-default:
+  # The plural of the currency. Example: 100 dollars
+  plural: Dollars
+  # The singular form of the currency ex: 1 dollar
+  singular: Dollar
+   # The short character before/after money
+  char: "\$"
+  # Should the char be but before or after the formatted strings
+  # Values: front, back, never
+  display-char: "front"
+
+database:
+  player:
+    type: mysql
+    user: root
+    password: SuperPassword!
+    url: jdbc:mysql://127.0.0.1:3306/...
+    table:
+      global: global_player_economy
+      per-world: %world%_player_economy
+
+per-world:
+  player-accounts:
+    enabled: true
+    # nether will not have it's owned player account manager
+    worlds:
+      - "world"
+      - "world_the_end"

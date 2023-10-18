@@ -1,83 +1,33 @@
 placeholders:
-  - name: anti-cheat
-    text: "<dark_gray>[<light_purple>Cosmic</light_purple><aqua>Capital</aqua><dark_purple>AntiCheat</dark_purple>]</dark_gray>"
   - name: prefix
-    text: "<dark_gray>[<light_purple>Cosmic</light_purple><aqua>Capital</aqua>]</dark_gray>"
-  - name: break
-    text: "<dark_aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-<aqua>-</aqua>-"
+    text: "<dark_gray>[<light_purple>Cosmic<aqua>Capital<dark_gray>]<reset>"
   - name: usage
-    text: "<red>Wrong Usage!</red>"
-
-anti-cheat:
-  banknote:
-    claim:
-      non-valid: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover>"
-      non-valid-account-exists: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\nBalance %account:balance%\\nID:%account:id%>ACCOUNT</hover>"
-      de-activated: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>DEACTIVATED BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\\nBalance %account:balance%\\\nID:%account:id%>ACCOUNT</hover>"
-      active-different-amount: "%anti-cheat% <aqua><white>%who%</white> might be trying to be using duped banknotes <red>ACTIVE/CHANGED VALUE BANKNOTE</red>. <bold><hover:show_text:Name: %note:name%\\nBalance %note:balance%\\nID:%note:id%>BANKNOTE</hover> <hover:show_text:Name: %account:name%\\nBalance %account:balance%\\nID:%account:id%>ACCOUNT</hover>"
+    text: "<red>Wrong Usage!"
 
 command-parse:
   incorrect-format: "%prefix% %usage% <click:suggest_command:/%command%><hover:show_text:'<green>Click here to suggest the correct format!'><gray>/%command%</gray></hover>"
-  player-only: "%prefix% <red>You cannot execute <white>%command%.</white>"
-  console-only: "%prefix% <red>You cannot execute <white>%command%.</white>"
-  no-tab:
-    player: "< No players found >"
+  exception: "%prefix% <red>Incorrect Usage! <white>%exception%"
 
-economy:
-  give:
-    permission: "%prefix% <red>You do not have permissions to give players money."
-    incorrect-usage: "%message:command-parse.incorrect-format%"
-    unknown-player: "%message:command-parse.incorrect-format%"
-    negative: "%message:command-parse.incorrect-format%"
-    all:
-      permission: "%prefix% <red>You do not have permissions to give money to all offline players and online players money."
-    offline:
-      permission: "%prefix% <red>You do not have permissions to give money to all offline players money."
-    online:
-      permission: "%prefix% <red>You do not have permissions to give money to all online players money."
-    player:
-      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
-    receive: "%prefix% <green>You were given <white>$%amount%</white> by <white>%who%</white>."
-    send:    "%prefix% <green>Sent <white>$%amount%</white> to <white>%who%</white>"
-  take:
-    permission: "%prefix% <red>You do not have permissions to remove money from players."
-    incorrect-usage: "%message:command-parse.incorrect-format%"
-    unknown-player: "%message:command-parse.incorrect-format%"
-    negative: "%message:command-parse.incorrect-format%"
-    all:
-      permission: "%prefix% <red>You do not have permissions to remove money from all offline players and online players money."
-    offline:
-      permission: "%prefix% <red>You do not have permissions to remove money from all offline players money."
-    online:
-      permission: "%prefix% <red>You do not have permissions to remove money from all online players money."
-    player:
-      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
-    removed: "%prefix% <green><white>$%amount%</white> was removed from you by <white>%who%</white>."
-    remove:    "%prefix% <green>Removed <white>$%amount%</white> from <white>%who%</white>"
-  set:
-    permission: "%prefix% <red>You do not have permissions to remove money from players."
-    incorrect-usage: "%message:command-parse.incorrect-format%"
-    unknown-player: "%message:command-parse.incorrect-format%"
-    negative: "%message:command-parse.incorrect-format%"
-    all:
-      permission: "%prefix% <red>You do not have permissions to set money of all offline players and online players money."
-    offline:
-      permission: "%prefix% <red>You do not have permissions to set money of all offline players money."
-    online:
-      permission: "%prefix% <red>You do not have permissions to set money of all online players money."
-    player:
-      unknown-player: "%prefix% <red>Could not find player for name: <gray>%who%</gray>."
-    set: "%prefix% <green><white>%who%</white> has set your balance as <white>$%amount%</white>."
-    operator:    "%prefix% <green>Set <white>%who%</white>'s balance to <white>$%amount%</white>"
+#
+# %currency-name%
+# %currency-char%
+# %currency-singular%
+# %currency-plural%
+#
 
-balance:
-  unknown-player: "%message:command-parse.incorrect-format%"
-  other: "<green>Balance of <white>%who%</white>: <white>$%balance%</white>"
-  self: "<green>Your balance: <white>$%balance%</white>"
+economy-remove-sender: "%prefix%<yellow> You removed <white>%currency-char%%amount% <yellow>from <white>%player%<yellow>'s balance. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-remove-receiver: "%prefix%<yellow> <white>%currency-char%%amount% <yellow>was removed from your balance by an operator. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-remove-unknown-operator-error: "%prefix<red> Unknown error accorded. Couldn't load your operator status. (SENDER STATUS)"
+economy-add-sender: "%prefix%<yellow> You added <white>%currency-char%%amount% <yellow>to <white>%player%<yellow>'s balance. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-add-receiver: "%prefix%<yellow> <white>%currency-char%%amount% <yellow>was added to your balance by an operator. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-add-unknown-operator-error: "%prefix<red> Unknown error accorded. Couldn't load your operator status. (SENDER STATUS)"
+economy-set-sender: "%prefix%<yellow> You set <white>%player%<yellow>'s balance to <white>%currency-char%%amount%<yellow>. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-set-receiver: "%prefix%<yellow> Your balance was set to <white>%currency-char%%amount% <yellow>by an operator. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-set-unknown-operator-error: "%prefix<red> Unknown error accorded. Couldn't load your operator status. (SENDER STATUS)"
+economy-reset-sender: "%prefix% <dark_red>You reset <red>%player%<dark_red>'s balance. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-reset-receiver: "%prefix%<dark_red> Your balance was reset to <red>%currency-char%%0% <dark_red>by an operator. <gray><italic>(%currency-char%%old-balance% -> %currency-char%%new-balance%)"
+economy-reset-unknown-operator-error: "%prefix<red> Unknown error accorded. Couldn't load your operator status. (SENDER STATUS)"
 
-pay:
-  unknown-player: "%message:command-parse.incorrect-format%"
-  negative: "%message:command-parse.incorrect-format%"
-  no-funds: "%prefix% <red>You do not have enough funds to pay <gray>%amount%</gray> to <gray>%who%</gray>."
-  send: "%prefix% <green>Sent <white>%amount%</white> to <white>%who%</white>."
-  receive: "%prefix% <green>Received <white>%amount%</white> from <white>%who%</white>."
+balance-player: "%prefix% <yellow>Your balance is: <white>%currency-char%%balance%<yellow>."
+balance-other: "%prefix% <white>%player%<yellow>'s balance is: <white>%currency-char%%balance%<yellow>."
+balance-unknown-operator-error: "%prefix%<red> Unknown error accorded. Couldn't load operator status. (SENDER STATUS)"

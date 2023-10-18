@@ -1,11 +1,8 @@
 package me.antritus.astral.cosmiccapital.manager;
 
+import com.github.antritus.astral.utils.ColorUtils;
 import me.antritus.astral.cosmiccapital.CosmicCapital;
-import me.antritus.astral.cosmiccapital.api.Account;
-import me.antritus.astral.cosmiccapital.api.BanknoteAccount;
-import me.antritus.astral.cosmiccapital.api.NumberUtils;
-import me.antritus.astral.cosmiccapital.astrolminiapi.ColorUtils;
-import me.antritus.astral.cosmiccapital.database.BanknoteDatabase;
+import me.antritus.astral.cosmiccapital.utils.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,7 +17,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.codehaus.plexus.util.dag.DAG;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -31,6 +27,7 @@ import java.util.UUID;
  * @since 1.0-SNAPSHOT
  */
 public class BanknoteAccountManager implements Listener {
+	/*
 	private final NamespacedKey KEY_ID;
 	private final NamespacedKey KEY_AMOUNT;
 	private final CosmicCapital cosmicCapital;
@@ -87,7 +84,7 @@ public class BanknoteAccountManager implements Listener {
 			}
 			event.getPlayer().sendMessage("Received: "+banknoteAccount.getBalance());
 			Account account = cosmicCapital.getPlayerDatabase().get(event.getPlayer());
-			banknoteAccount.sendTransfer(account, banknoteAccount.getBalance());
+			banknoteAccount.transfer(cosmicCapital, account, banknoteAccount.getBalance(), null);
 			cosmicCapital.getBankNoteDatabase().delete(banknoteAccount);
 			event.getPlayer().getInventory().remove(item);
 			event.setCancelled(true);
@@ -161,4 +158,5 @@ public class BanknoteAccountManager implements Listener {
 			}
 		}
 	}
+	 */
 }
